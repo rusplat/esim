@@ -286,12 +286,12 @@
 
     </div>
 
-      <script>
-        // --- JavaScript Логика ---
+       <script>
+        // --- JavaScript Логика (Обновленная для многошаговой оплаты) ---
         
         let currentSelection = {};
         
-        // 1. Навигация и данные (Витрина)
+        // 1. ВИРТРИНА (Page 1 -> Page 2)
         document.querySelectorAll('.operator-card').forEach(card => {
             card.addEventListener('click', () => {
                 currentSelection.operator = card.dataset.operator;
@@ -310,39 +310,67 @@
             });
         });
         
-        // 2. Логика выбора способа оплаты
+        // 2. ВЫБОР СПОСОБА ОПЛАТЫ (Крипто или СБП)
         document.querySelectorAll('.btn-option').forEach(btn => {
             btn.addEventListener('click', () => {
                 const target = btn.dataset.target;
                 
                 // Скрываем все секции
-                document.getElementById('crypto-section').classList.remove('active');
-                document.getElementById('sbp-section').classList.remove('active');
+                document.getElementById('crypto-section').classList.add('hidden-section');
+                document.getElementById('sbp-section').classList.add('hidden-section');
                 
                 // Показываем нужную секцию
                 if (target === 'crypto') {
-                    document.getElementById('crypto-section').classList.add('active');
+                    document.getElementById('crypto-section').classList.remove('hidden-section');
                 } else if (target === 'sbp') {
-                    document.getElementById('sbp-section').classList.add('active');
+                    document.getElementById('sbp-section').classList.remove('hidden-section');
                 }
             });
         });
         
-        // 3. Логика отображения адреса и копирования
-        document.querySelectorAll('.crypto-address-item').forEach(item => {
-            item.addEventListener('click', () => {
-                const coin = item.dataset.coin;
-                const address = item.dataset.address;
+        // 3. ЛОГИКА ВЫБОРА КРИПТО АДРЕСА И КОПИРОВАНИЕ
+        document.getElementById('crypto-section').addEventListener('click', (e) => {
+            // Логика для выбора адреса
+            if (e.target.classList.contains('crypto-address-item')) {
+                const coin = e.target.dataset.coin;
+                const address = e.target.dataset.address;
                 
                 document.getElementById('address-display').innerHTML = `
                     <p><strong>Адрес для оплаты ${coin}:</strong></p>
                     <div class="address-text">${address}</div>
-                                        <button class="btn-copy" data-address="${address}">Скопировать адрес</button>
+                    <button class="btn-copy" data-address="${address}">Скопировать адрес</button>
                 `;
-            });
+            }
+            // Логика для кнопки "Я ОПЛАТИЛ" (Крипто)
+            else if (e.target.id === 'btn-pay-crypto') {
+                // Проверка, выбран ли адрес перед переходом
+                if (document.getElementById('address-display').querySelector('.address-text')) {
+                    // Переход на страницу 3
+                    document.getElementById('page2').classList.remove('active');
+                    document.getElementById('page3').classList.add('active');
+                    
+                    // Имитация проверки оплаты
+                    document.getElementById('qr-display').innerHTML = `
+                        <p style="font-size: 1.5em; color: orange;">Идет проверка оплаты...</p>
+                        <p>Ожидайте, это займет 30 секунд.</p>
+                    `;
+
+                    setTimeout(() => {
+                        window.open('https://www.google.com', '_blank'); // ССЫЛКА ПОСЛЕ ОПЛАТЫ
+                        
+                        document.getElementById('qr-display').innerHTML = `
+                            <p style="font-size: 1.5em; color: green;">✅ Генерация QR-кода...</p>
+                            <p>QR-код для подключения eSIM будет готов через минуту.</p>
+                        `;
+                    }, 30000); 
+
+                } else {
+                    alert('Пожалуйста, сначала выберите криптовалюту и скопируйте адрес.');
+                }
+            }
         });
         
-        // 4. Логика кнопки копирования (работает только в браузере)
+        // 4. ЛОГИКА КНОПКИ КОПИРОВАНИЯ (Для крипто)
         document.getElementById('page2').addEventListener('click', (e) => {
             if (e.target.classList.contains('btn-copy')) {
                 const addressToCopy = e.target.dataset.address;
@@ -355,29 +383,27 @@
                 });
             }
         });
+        
+        // 5. ЛОГИКА КНОПКИ "Я ОПЛАТИЛ" (Для СБП)
+        document.getElementById('btn-pay-sbp').addEventListener('click', () => {
+            // Переход на страницу 3
+            document.getElementById('page2').classList.remove('active');
+            document.getElementById('page3').classList.add('active');
+            
+            // Имитация проверки оплаты
+            document.getElementById('qr-display').innerHTML = `
+                <p style="font-size: 1.5em; color: orange;">Идет проверка оплаты...</p>
+                <p>Ожидайте, это займет 30 секунд.</p>
+            `;
 
-        // 5. Логика кнопки "Я ОПЛАТИЛ" (Крипто и СБП)
-        document.getElementById('page2').addEventListener('click', (e) => {
-            if (e.target.id === 'btn-pay-crypto' || e.target.id === 'btn-pay-sbp') {
-                // Переход на страницу 3
-                document.getElementById('page2').classList.remove('active');
-                document.getElementById('page3').classList.add('active');
+            setTimeout(() => {
+                // После 30 секунд открываем новую вкладку
+                window.open('https://www.google.com', '_blank'); // <--- ССЫЛКА ПОСЛЕ ОПЛАТЫ
                 
-                // Имитация проверки оплаты
                 document.getElementById('qr-display').innerHTML = `
-                    <p style="font-size: 1.5em; color: orange;">Идет проверка оплаты...</p>
-                    <p>Ожидайте, это может занять до 30 секунд.</p>
+                    <p style="font-size: 1.5em; color: green;">✅ Генерация QR-кода...</p>
+                    <p>QR-код для подключения eSIM будет готов через минуту.</p>
                 `;
-
-                setTimeout(() => {
-                    // После 30 секунд (30000 мс) открываем новую вкладку
-                    window.open('https://www.google.com', '_blank'); // <--- НЕ ЗАБУДЬТЕ ИСПРАВИТЬ ЭТУ ССЫЛКУ!
-                    
-                    document.getElementById('qr-display').innerHTML = `
-                        <p style="font-size: 1.5em; color: green;">✅ Идет генерация QR-кода...</p>
-                        <p>Ожидайте, скоро будет готово.</p>
-                    `;
-                }, 30000); // 30 секунд
-            }
+            }, 30000); 
         });
     </script>
