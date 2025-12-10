@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eSIM Магазин</title>
+    <style>
+        /* --- CSS Стили --- */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            color: #0056b3;
+            text-align: center;
+        }
+        .operator-list {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            padding: 20px 0;
+        }
+        .operator-card {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.3s;
+            border: 2px solid transparent;
+        }
+        .operator-card:hover {
+            background: #d9dee4;
+            border-color: #007bff;
+        }
+        .operator-card .price {
+            font-size: 1.5em;
+            color: #28a745;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .page {
+            display: none; /* Скрываем все страницы по умолчанию */
+        }
+        .page.active {
+            display: block; /* Показываем активную страницу */
+        }
+        .payment-details {
+            border: 2px solid #ffc107;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            background: #fff9e6;
+        }
+        .crypto-address {
+            background: #eee;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+            font-family: monospace;
+            word-break: break-all;
+        }
+        .qr-code-area {
+            text-align: center;
+            padding: 20px;
+            border: 2px dashed #17a2b8;
+            background: #e0f7fa;
+            margin-bottom: 20px;
+        }
+        .btn {
+            display: block;
+            width: 80%;
+            margin: 20px auto;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+                      cursor: pointer;
+            color: white;
+            text-align: center;
+        }
+        #btn-pay { background: #007bff; }
+        #btn-check { background: #28a745; }
+        #btn-pay:hover { background: #0056b3; }
+        #btn-check:hover { background: #218838; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <!-- СТРАНИЦА 1: ВИТРИНА -->
+        <div id="page1" class="page active">
+            <h1>Выберите eSIM Оператора</h1>
+            <div class="operator-list">
+                <div class="operator-card" data-operator="МТС" data-price="650 руб.">
+                    <p>МТС</p>
+                    <div class="price">650 руб.</div>
+                </div>
+                <div class="operator-card" data-operator="МегаФон" data-price="799 руб.">
+                    <p>МегаФон</p>
+                    <div class="price">799 руб.</div>
+                </div>
+                <div class="operator-card" data-operator="Билайн" data-price="549 руб.">
+                    <p>Билайн</p>
+                    <div class="price">549 руб.</div>
+                </div>
+                <div class="operator-card" data-operator="Tele2" data-price="920 руб.">
+                    <p>Tele2</p>
+                    <div class="price">920 руб.</div>
+                </div>
+                <div class="operator-card" data-operator="Yota" data-price="810 руб.">
+                    <p>Yota</p>
+                    <div class="price">810 руб.</div>
+                </div>
+                <div class="operator-card" data-operator="Tinkoff Mobile" data-price="700 руб.">
+                    <p>Tinkoff Mobile</p>
+                    <div class="price">700 руб.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- СТРАНИЦА 2: ОПЛАТА -->
+        <div id="page2" class="page">
+            <h2>Подтверждение Заказа</h2>
+            
+            <div class="payment-details">
+                <p><strong>Выбрано:</strong> <span id="selected-operator"></span></p>
+                <p><strong>Стоимость:</strong> <span id="selected-price"></span></p>
+                <p><strong>Описание:</strong> Ваша eSIM будет отправлена после подтверждения оплаты. Карта уже **зарегистрирована** на случайный номер. Базовый тариф активирован.</p>
+                <p><strong>Номер для подключения:</strong> Случайный (Сгенерирован: <span id="random-number"></span>)</p>
+            </div>
+
+            <h3>Выберите способ оплаты:</h3>
+            
+            <!-- Реквизиты Криптовалют -->
+            <div class="crypto-list">
+                <div class="crypto-address"><strong>BTC:</strong> bc1qn6ye3evkl2cj04dhxyk7gvrk72vjhtqhe3gzql</div>
+                <div class="crypto-address"><strong>USDT TRC20:</strong> TTxL8srvCqom7RebeyZAjuWyActK9R9SD4</div>
+                <div class="crypto-address"><strong>ETH:</strong> 0x7cf4bc91b11e6179153c5f2531d4ace1446bd973</div>
+                <div class="crypto-address"><strong>TON:</strong> UQBPy2EbbrKy0vRj42Dau5h6vWYo0NUGSxTo-Ywpuccso8ZP</div>
+                <div class="crypto-address"><strong>LTC:</strong> ltc1qeezhcqd2ctt8v8jwtvyn6v8yuvmzg0tmj46a4s</div>
+                <div class="crypto-address"><strong>RUBT:</strong> TUzNN7mNRMxQBstZHg8aEaawxxUpjMDc3e</div>
+                <div class="crypto-address"><strong>TRX:</strong> TUYgFfet9KQytXjJ9jwQtVANMnTpVigez8</div>
+            </div>
+            
+            <!-- Ссылка на СБП -->
+            <a href="https://qr.nspk.ru/AS1A000OS35BAI6I86FRLPOEKFGF6ITL?type=01&bank=100000000008&crc=709D" target="_blank">
+                <button class="btn" id="btn-sbp">Оплатить через СБП (QR-код)</button>
+            </a>
+            
+            <button class="bt
+              n" id="btn-pay">Оплатил (Криптовалютой/Переводом)</button>
+        </div>
+
+        <!-- СТРАНИЦА 3: ОЖИДАНИЕ -->
+        <div id="page3" class="page">
+            <h2>Проверка Оплаты</h2>
+            <div class="qr-code-area">
+                <p>Ваш платеж проверяется...</p>
+                <div id="qr-display">
+                    <!-- Здесь будет сгенерированный QR-код -->
+                    <p style="font-size: 1.5em;">Ожидайте, идет генерация...</p>
+                </div>
+                <p>Пожалуйста, дождитесь, пока система найдет ваш перевод.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- JavaScript Логика ---
+        
+        // 1. Навигация и данные
+        let currentSelection = {};
+        
+        document.querySelectorAll('.operator-card').forEach(card => {
+            card.addEventListener('click', () => {
+                currentSelection.operator = card.dataset.operator;
+                currentSelection.price = card.dataset.price;
+                
+                // Переход на страницу 2
+                document.getElementById('page1').classList.remove('active');
+                document.getElementById('page2').classList.add('active');
+                
+                // Заполняем данные на странице 2
+                document.getElementById('selected-operator').textContent = currentSelection.operator;
+                document.getElementById('selected-price').textContent = currentSelection.price;
+                
+                // Генерируем случайный номер
+                document.getElementById('random-number').textContent = Math.floor(100000 + Math.random() * 900000);
+            });
+        });
+        
+        // 2. Кнопка "Оплатил (Крипто/Перевод)"
+        document.getElementById('btn-pay').addEventListener('click', () => {
+            // Переход на страницу 3
+            document.getElementById('page2').classList.remove('active');
+            document.getElementById('page3').classList.add('active');
+            
+            // Имитация проверки оплаты
+            setTimeout(() => {
+                // После 30 секунд (30000 мс) открываем новую вкладку
+                window.open('https://www.google.com', '_blank'); // Замените Google на ссылку, куда вы хотите перенаправить после оплаты
+                
+                // Здесь можно было бы имитировать QR-код
+                document.getElementById('qr-display').innerHTML = `
+                    <p style="font-size: 1.5em; color: green;">✅ Оплата найдена!</p>
+                    <p>Ваш eSIM готов к подключению.</p>
+                `;
+                
+            }, 3000); // 3 секунды для демонстрации (вместо 30 секунд)
+        });
+
+    </script>
+</body>
+</html>
