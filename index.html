@@ -228,7 +228,7 @@
             <div class="payment-details">
                 <p><strong>Выбрано:</strong> <span id="selected-operator"></span></p>
                 <p><strong>Стоимость:</strong> <span id="selected-price"></span></p>
-                <p><strong>Описание:</strong> Ваша eSIM будет отправлена после подтверждения оплаты. Карта уже **зарегистрирована** на случайный номер. Базовый тариф активирован.</p>
+                <p><strong>Описание:</strong> Ваша eSIM будет доступна после подтверждения оплаты. Номер уже **зарегистрирован** на случайный паспорт. Базовый тариф активирован.</p>
                 <p><strong>Номер для подключения:</strong> Случайный (Сгенерирован: <span id="random-number"></span>)</p>
             </div>
 
@@ -305,11 +305,11 @@
                 document.getElementById('selected-operator').textContent = currentSelection.operator;
                 document.getElementById('selected-price').textContent = currentSelection.price;
                 
-                // Генерируем случайный номер
-                document.getElementById('random-number').textContent = Math.floor(100000 + Math.random() * 900000);
-            });
-        });
-        
+                // Генерируем 9 случайных цифр
+                const random9Digits = Math.floor(Math.random() * 1000000000); // Число от 0 до 999,999,999
+                // Форматируем номер: +7 9 + 9 случайных цифр
+                document.getElementById('random-number').textContent = `+7 9${random9Digits.toString().padStart(9, '0')}`;
+                
         // 2. ВЫБОР СПОСОБА ОПЛАТЫ (Крипто или СБП)
         document.querySelectorAll('.btn-option').forEach(btn => {
             btn.addEventListener('click', () => {
