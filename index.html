@@ -90,6 +90,96 @@
             color: white;
             text-align: center;
         }
+        /* Стили для скрытия секций */
+        .hidden-section {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        /* Стили для кнопок выбора способа оплаты */
+        .payment-options {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+        .btn-option {
+            background: #6c757d;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn-option:hover {
+            background: #5a6268;
+        }
+
+        /* Стили для списка криптовалют */
+        .crypto-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .crypto-address-item {
+            padding: 8px 12px;
+            background: #007bff;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .crypto-address-item:hover {
+            background: #0056b3;
+        }
+
+        /* Стили для отображения адреса и кнопки копирования */
+        .address-display {
+            background: #f8f9fa;
+            border: 1px dashed #ced4da;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .address-text {
+            font-family: monospace;
+            font-size: 0.9em;
+            word-break: break-all;
+            margin-bottom: 10px;
+        }
+        .btn-copy {
+            background: #ffc107;
+            color: #333;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+        .btn-copy:hover {
+            background: #e0a800;
+        }
+
+        /* Стили для большой кнопки "Я ОПЛАТИЛ" */
+        .btn-large {
+            width: 100%; /* Делаем кнопку широкой */
+            margin-top: 20px;
+            background: #dc3545; /* Красный цвет для привлечения внимания */
+        }
+        .btn-large:hover {
+            background: #c82333;
+        }
+        .btn-sbp-final {
+            background: #007bff;
+        }
+        .btn-sbp-final:hover {
+            background: #0056b3;
+        }
         #btn-pay { background: #007bff; }
         #btn-check { background: #28a745; }
         #btn-pay:hover { background: #0056b3; }
@@ -131,7 +221,7 @@
             </div>
         </div>
 
-        <!-- СТРАНИЦА 2: ОПЛАТА -->
+  <!-- СТРАНИЦА 2: ОПЛАТА (Обновленная) -->
         <div id="page2" class="page">
             <h2>Подтверждение Заказа</h2>
             
@@ -144,26 +234,43 @@
 
             <h3>Выберите способ оплаты:</h3>
             
-            <!-- Реквизиты Криптовалют -->
-            <div class="crypto-list">
-                <div class="crypto-address"><strong>BTC:</strong> bc1qn6ye3evkl2cj04dhxyk7gvrk72vjhtqhe3gzql</div>
-                <div class="crypto-address"><strong>USDT TRC20:</strong> TTxL8srvCqom7RebeyZAjuWyActK9R9SD4</div>
-                <div class="crypto-address"><strong>ETH:</strong> 0x7cf4bc91b11e6179153c5f2531d4ace1446bd973</div>
-                <div class="crypto-address"><strong>TON:</strong> UQBPy2EbbrKy0vRj42Dau5h6vWYo0NUGSxTo-Ywpuccso8ZP</div>
-                <div class="crypto-address"><strong>LTC:</strong> ltc1qeezhcqd2ctt8v8jwtvyn6v8yuvmzg0tmj46a4s</div>
-                <div class="crypto-address"><strong>RUBT:</strong> TUzNN7mNRMxQBstZHg8aEaawxxUpjMDc3e</div>
-                <div class="crypto-address"><strong>TRX:</strong> TUYgFfet9KQytXjJ9jwQtVANMnTpVigez8</div>
+            <!-- КНОПКИ ВЫБОРА СПОСОБА ОПЛАТЫ -->
+            <div class="payment-options">
+                <button class="btn-option" data-target="crypto">Оплатить криптовалютой</button>
+                <button class="btn-option" data-target="sbp">Оплатить через СБП</button>
             </div>
             
-            <!-- Ссылка на СБП -->
-            <a href="https://qr.nspk.ru/AS1A000OS35BAI6I86FRLPOEKFGF6ITL?type=01&bank=100000000008&crc=709D" target="_blank">
-                <button class="btn" id="btn-sbp">Оплатить через СБП (QR-код)</button>
-            </a>
-            
-            <button class="bt
-              n" id="btn-pay">Оплатил (Криптовалютой/Переводом)</button>
-        </div>
+            <!-- РАЗДЕЛ КРИПТОВАЛЮТ (Скрыт по умолчанию) -->
+            <div id="crypto-section" class="hidden-section">
+                <h4>Выберите монету:</h4>
+                <div class="crypto-list">
+                    <div class="crypto-address-item" data-coin="BTC" data-address="bc1qn6ye3evkl2cj04dhxyk7gvrk72vjhtqhe3gzql">BTC</div>
+                    <div class="crypto-address-item" data-coin="USDT TRC20" data-address="TTxL8srvCqom7RebeyZAjuWyActK9R9SD4">USDT TRC20</div>
+                    <div class="crypto-address-item" data-coin="ETH" data-address="0x7cf4bc91b11e6179153c5f2531d4ace1446bd973">ETH</div>
+                    <div class="crypto-address-item" data-coin="TON" data-address="UQBPy2EbbrKy0vRj42Dau5h6vWYo0NUGSxTo-Ywpuccso8ZP">TON</div>
+                    <div class="crypto-address-item" data-coin="LTC" data-address="ltc1qeezhcqd2ctt8v8jwtvyn6v8yuvmzg0tmj46a4s">LTC</div>
+                    <div class="crypto-address-item" data-coin="RUBT" data-address="TUzNN7mNRMxQBstZHg8aEaawxxUpjMDc3e">RUBT</div>
+                    <div class="crypto-address-item" data-coin="TRX" data-address="TUYgFfet9KQytXjJ9jwQtVANMnTpVigez8">TRX</div>
+                </div>
+                
+                <div id="address-display" class="address-display">
+                    <p>Нажмите на монету, чтобы увидеть адрес.</p>
+                </div>
 
+                <button class="btn btn-large" id="btn-pay-crypto">Я ОПЛАТИЛ</button>
+            </div>
+            
+            <!-- РАЗДЕЛ СБП (Скрыт по умолчанию) -->
+            <div id="sbp-section" class="hidden-section">
+                <p>Для оплаты через СБП будет открыто окно банка.</p>
+                <a href="https://qr.nspk.ru/AS1A000OS35BAI6I86FRLPOEKFGF6ITL?type=01&bank=100000000008&crc=709D" target="_blank">
+                    <button class="btn btn-large btn-sbp-final">ОПЛАТИТЬ ЧЕРЕЗ СБП</button>
+                </a>
+                <button class="btn btn-large" id="btn-pay-sbp">Я ОПЛАТИЛ</button>
+            </div>
+            
+        </div>
+        
         <!-- СТРАНИЦА 3: ОЖИДАНИЕ -->
         <div id="page3" class="page">
             <h2>Проверка Оплаты</h2>
@@ -179,12 +286,12 @@
 
     </div>
 
-    <script>
+      <script>
         // --- JavaScript Логика ---
         
-        // 1. Навигация и данные
         let currentSelection = {};
         
+        // 1. Навигация и данные (Витрина)
         document.querySelectorAll('.operator-card').forEach(card => {
             card.addEventListener('click', () => {
                 currentSelection.operator = card.dataset.operator;
@@ -203,26 +310,74 @@
             });
         });
         
-        // 2. Кнопка "Оплатил (Крипто/Перевод)"
-        document.getElementById('btn-pay').addEventListener('click', () => {
-            // Переход на страницу 3
-            document.getElementById('page2').classList.remove('active');
-            document.getElementById('page3').classList.add('active');
-            
-            // Имитация проверки оплаты
-            setTimeout(() => {
-                // После 30 секунд (30000 мс) открываем новую вкладку
-                window.open('https://www.google.com', '_blank'); // Замените Google на ссылку, куда вы хотите перенаправить после оплаты
+        // 2. Логика выбора способа оплаты
+        document.querySelectorAll('.btn-option').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const target = btn.dataset.target;
                 
-                // Здесь можно было бы имитировать QR-код
-                document.getElementById('qr-display').innerHTML = `
-                    <p style="font-size: 1.5em; color: green;">✅ Оплата найдена!</p>
-                    <p>Ваш eSIM готов к подключению.</p>
+                // Скрываем все секции
+                document.getElementById('crypto-section').classList.remove('active');
+                document.getElementById('sbp-section').classList.remove('active');
+                
+                // Показываем нужную секцию
+                if (target === 'crypto') {
+                    document.getElementById('crypto-section').classList.add('active');
+                } else if (target === 'sbp') {
+                    document.getElementById('sbp-section').classList.add('active');
+                }
+            });
+        });
+        
+        // 3. Логика отображения адреса и копирования
+        document.querySelectorAll('.crypto-address-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const coin = item.dataset.coin;
+                const address = item.dataset.address;
+                
+                document.getElementById('address-display').innerHTML = `
+                    <p><strong>Адрес для оплаты ${coin}:</strong></p>
+                    <div class="address-text">${address}</div>
+                                        <button class="btn-copy" data-address="${address}">Скопировать адрес</button>
                 `;
-                
-            }, 3000); // 3 секунды для демонстрации (вместо 30 секунд)
+            });
+        });
+        
+        // 4. Логика кнопки копирования (работает только в браузере)
+        document.getElementById('page2').addEventListener('click', (e) => {
+            if (e.target.classList.contains('btn-copy')) {
+                const addressToCopy = e.target.dataset.address;
+                navigator.clipboard.writeText(addressToCopy).then(() => {
+                    e.target.textContent = 'Скопировано!';
+                    setTimeout(() => { e.target.textContent = 'Скопировать адрес'; }, 1500);
+                }).catch(err => {
+                    console.error('Ошибка копирования:', err);
+                    alert('Ошибка копирования. Пожалуйста, скопируйте вручную.');
+                });
+            }
         });
 
+        // 5. Логика кнопки "Я ОПЛАТИЛ" (Крипто и СБП)
+        document.getElementById('page2').addEventListener('click', (e) => {
+            if (e.target.id === 'btn-pay-crypto' || e.target.id === 'btn-pay-sbp') {
+                // Переход на страницу 3
+                document.getElementById('page2').classList.remove('active');
+                document.getElementById('page3').classList.add('active');
+                
+                // Имитация проверки оплаты
+                document.getElementById('qr-display').innerHTML = `
+                    <p style="font-size: 1.5em; color: orange;">Идет проверка оплаты...</p>
+                    <p>Ожидайте, это может занять до 30 секунд.</p>
+                `;
+
+                setTimeout(() => {
+                    // После 30 секунд (30000 мс) открываем новую вкладку
+                    window.open('https://www.google.com', '_blank'); // <--- НЕ ЗАБУДЬТЕ ИСПРАВИТЬ ЭТУ ССЫЛКУ!
+                    
+                    document.getElementById('qr-display').innerHTML = `
+                        <p style="font-size: 1.5em; color: green;">✅ Идет генерация QR-кода...</p>
+                        <p>Ожидайте, скоро будет готово.</p>
+                    `;
+                }, 30000); // 30 секунд
+            }
+        });
     </script>
-</body>
-</html>
